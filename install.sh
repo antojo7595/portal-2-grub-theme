@@ -7,7 +7,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Define theme's name
-THEME_NAME="nombre-de-tu-tema"
+THEME_NAME="portal-2-theme"
 THEME_DIR="/boot/grub/themes/$THEME_NAME"
 
 echo "Starting instalation for: $THEME_NAME..."
