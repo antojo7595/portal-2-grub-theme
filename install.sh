@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# 1. Check for root
+# Check for root
 if [ "$EUID" -ne 0 ]; then
-  echo "Error: Please, run script as root, i cannot change theme without that (hint, sudo ./install.sh)"
+  echo "Error: Please run script as root, I cannot change the theme without that (hint: sudo ./install.sh)"
   exit 1
 fi
 
@@ -10,26 +10,45 @@ fi
 THEME_NAME="portal-2-theme"
 THEME_DIR="/boot/grub/themes/$THEME_NAME"
 
-echo "Starting instalation for: $THEME_NAME..."
+# Verify source directory exists before proceeding
+if [ ! -d "$THEME_NAME" ]; then
+  echo "Error: Directory '$THEME_NAME' not found in current path."
+  echo "Make sure you are running this script from the correct folder."
+  exit 1
+fi
 
-# 2. Create GRUB theme things if doesn't exists atp
+echo "Starting installation for: $THEME_NAME..."
+
+# Create GRUB theme directory if it doesn't exist
 mkdir -p /boot/grub/themes
 
-# 3. Copy files to system dir
+# Copy files to system dir
 echo "Copying files to $THEME_DIR..."
-# If theme alr exists (update), get the fuhh out of here
+# If theme already exists (update), remove it first
 rm -rf "$THEME_DIR"
 cp -a "$THEME_NAME" "$THEME_DIR"
 
-# 4. Modify GRUB's config
-echo "Configurating /etc/default/grub..."
-# Deleting the GRUB_THEME thing so i can just paste it below without any problems
-sed -i '/^GRUB_THEME=/d' /etc/default/grub
-# Adds the route of the new theme
-echo "GRUB_THEME=\"$THEME_DIR/theme.txt\"" >>/etc/default/grub
+# Verify theme.txt was actually copied
+if [ ! -f "$THEME_DIR/theme.txt" ]; then
+  echo "Error: theme.txt not found in $THEME_DIR. Installation aborted."
+  exit 1
+fi
 
-# 5. Update GRUB (why it cannot be the same for all?)
-echo "Updating grub..."
+# Modify GRUB's config
+echo "Configuring /etc/default/grub..."
+# Check if grub default config exists
+if [ -f /etc/default/grub ]; then
+  # Deleting the GRUB_THEME line so we can paste it below without duplicates
+  sed -i '/^GRUB_THEME=/d' /etc/default/grub
+  # Adds the route of the new theme
+  echo "GRUB_THEME=\"$THEME_DIR/theme.txt\"" >> /etc/default/grub
+else
+  echo "Error: /etc/default/grub not found."
+  exit 1
+fi
+
+# Update GRUB
+echo "Updating GRUB..."
 if command -v update-grub &>/dev/null; then
   update-grub # For Debian, Ubuntu, Linux Mint
 elif command -v grub-mkconfig &>/dev/null; then
@@ -38,7 +57,7 @@ elif command -v grub2-mkconfig &>/dev/null; then
   grub2-mkconfig -o /boot/grub2/grub.cfg # For Fedora, CentOS
 else
   echo "WARN: Script couldn't update GRUB automatically."
-  echo "Please, update GRUB manually and ur done."
+  echo "Please, update GRUB manually and you're done."
   exit 1
 fi
 
