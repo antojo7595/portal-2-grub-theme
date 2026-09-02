@@ -42,4 +42,4 @@ else
   exit 1
 fi
 
-echo "Installation completed!"
+echo "Installation completed! Now you can delete this directory."
