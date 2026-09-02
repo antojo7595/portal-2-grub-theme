@@ -40,6 +40,8 @@ echo "Configuring /etc/default/grub..."
 if [ -f /etc/default/grub ]; then
   # Deleting the GRUB_THEME line so we can paste it below without duplicates
   sed -i '/^GRUB_THEME=/d' /etc/default/grub
+  # Ngl this may be useful for someone... probably
+  sed -i 's/^GRUB_TERMINAL_OUTPUT="console"/#GRUB_TERMINAL_OUTPUT="console"/' /etc/default/grub
   # Adds the route of the new theme
   echo "GRUB_THEME=\"$THEME_DIR/theme.txt\"" >> /etc/default/grub
 else
