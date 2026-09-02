@@ -42,4 +42,4 @@ else
   exit 1
 fi
 
-echo "Instalation complete!"
+echo "Installation completed!"
