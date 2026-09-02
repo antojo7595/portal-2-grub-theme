@@ -6,3 +6,6 @@
 ##### I may learn more abt making themes in grub
 
 ### In order to install this theme, clone (or download and then extract) this repo and run the install.sh script with sudo.
+
+
+###### Feedback is apreciated btw
