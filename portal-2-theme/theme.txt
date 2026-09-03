@@ -17,8 +17,8 @@ terminal-border: "0"
   width = 70%
   height = 60%
   item_font = "Fixedsys Regular 32"
-  item_color = "#7f8a8e"
-  selected_item_color = "#afbdaf"
+  item_color = "#afbdaf"
+  selected_item_color = "#ffffff"
   item_height = 48
   item_spacing = 8
   item_icon_space = 12
